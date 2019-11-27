@@ -52,7 +52,8 @@ count = 1
 
 
 # url
-url = url +  "&iStartCount=" + str(pageNum)+"&S&strStartTime="+startDate+"&strEndTime="+endDate
+url = url +  "&iStartCount=" + str(pageNum)+"&S&strStartTime="+startDate+"&strEndTime="+endDate+"&strSort=date"
+
 
 print(url)
 
