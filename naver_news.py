@@ -44,9 +44,11 @@ while 1:
         count += 1
 
         if page_num > last_page+1:
+            one_day_before = one_month_before - relativedelta(days=1) # end_date - 1일
+            one_day_before_date = one_day_before.strftime('%Y.%m.%d')
             one_month_before = one_month_before - relativedelta(months=1)  # 한달전 날짜에서 한달전을 뺌
             one_month_before_date = one_month_before.strftime('%Y.%m.%d')  # YYYY.MM.DD로 저장
-            start_date = end_date  # 시작 날짜는 end_date로 바꿈
+            start_date = one_day_before_date  # 시작 날짜는 end_date-1로 바꿈
             end_date = one_month_before_date  # end_date는 한달전 날짜로 바꿈
 
         if end_date < last_date:
