@@ -2,7 +2,7 @@
 
 if($_GET[select_type] != "") {
 	setcookie("selectType", "{$_GET[select_type]}", time()+86400*30,"/");
-	$_COOKIE["selectType"] = $_GET[select_type];
+	$_COOKIE["selectType"] = $_GET[select_type]; //for cookie save
 }
 
 ?>
@@ -103,9 +103,30 @@ body {
 	text-align: left;
 }
 
+#select-form, #form {
+	display: inline-block;
+}
+
+#bt {
+	width: 60px;
+	height: 35px;
+	border: 0px;
+	background: #1b5ac2;
+	outline: none;
+	float: right;
+	color: #ffffff;
+	cursor: pointer;
+	font-size: 15px;
+	font-weight: bold;
+}
+
 #select-type {
-	margin: auto; !important;
-	text-align: center;
+	font-size: 13px;
+	width: 150px;
+	height: 35px;
+	border: 5px ridge #1b5ac2;
+	float: left;
+	cursor: pointer;
 }
 
 </style>
@@ -160,27 +181,33 @@ $(document).ready(function() {
 	<div class="content">
 		<div class="box-container">
 			<div class="table-container">
-				<table cellpadding=0 cellspacing=0 width=100%>
-					<tr>
-						<td style="text-align: center;">
-							<div id="date-select">
-								<input type="date" value="2019-02-10" id="from_date" name="from_date">
-								<input type="date" value="2019-12-10" id="to_date" name="to_date">
-							</div>
-						</td>
-						<td style="text-align: center;">
-							<div id="form">
-								<select name="select_type" id="select-type">
-									<option value="" style="font-weight: bold;">선택하세요</option>
-									<option class="selectclass" id="5G" value="5G" <? if($_COOKIE[selectType] == "5G"){echo "5G"; }?> 5G</option>
-									<option class="selectclass" id="cloud" value="클라우드" <? if($_COOKIE[selectType] == "클라우드"){echo "클라우드"; }?> 클라우드</option>
-									<option class="selectclass" id="AI" value="인공지능" <? if($_COOKIE[selectType] == "인공지능"){echo "인공지능"; }?> 인공지능</option>
-									<option class="selectclass" id="blockchain" value="인공지능" <? if($_COOKIE[selectType] == "블록체인"){echo "블록체인"; }?> 블록체인</option>
-									<option class="selectclass" id="smartfactory" value="스마트팩토리" <? if($_COOKIE[selectType] == "스마트팩토리"){echo "스마트팩토리"; }?> 스마트팩토리</option>
-							</div>
-						</td>
-					</tr>
-				</table>
+				<form action="./ig.php" method="get" id="container-form">
+					<table cellpadding=0 cellspacing=0 width=100%>	
+						<tr>
+							<td style="text-align: center;">
+								<div id="date-select">
+									<input type="date" value="2019-02-10" id="from_date" name="from_date">
+									<input type="date" value="2019-12-10" id="to_date" name="to_date">
+								</div>
+							</td>
+							<td style="text-align: center;">
+								<div id="select-form">
+									<select name="select_type" id="select-type">
+										<option value="" style="font-weight: bold;">선택하세요</option>
+										<option class="selectclass" id="5G" value="5G" <?php if($_COOKIE[selectType] == "5G"){echo "selected"; }?> > 5G </option>
+										<option class="selectclass" id="cloud" value="클라우드" <?php if($_COOKIE[selectType] == "클라우드"){echo "selected"; }?>> 클라우드</option>
+										<option class="selectclass" id="AI" value="인공지능" <?php if($_COOKIE[selectType] == "인공지능"){echo "selected"; }?>> 인공지능</option>
+										<option class="selectclass" id="blockchain" value="블록체인" <?php if($_COOKIE[selectType] == "블록체인"){echo "selected"; }?>> 블록체인</option>
+										<option class="selectclass" id="smartfactory" value="스마트팩토리" <?php if($_COOKIE[selectType] == "스마트팩토리"){echo "selected"; }?>> 스마트팩토리</option>
+									</select>
+									<div id="form">
+										<input type="submit" value="search" id="bt">
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</form>
 			</div>
 		</div>
 		<div class="content-container">
