@@ -6,6 +6,11 @@ from bs4 import BeautifulSoup as bs
 from urllib.parse import quote_plus
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import requests
+import pymysql
+
+conn = pymysql.connect(host='localhost', user='xpxp9985', password='kch782586!!!', db='crawling', charset='utf8mb4')
+cur = conn.cursor()
 
 now = datetime.now()
 now_date = now.strftime('%Y.%m.%d')
@@ -14,7 +19,14 @@ one_month_before = now - relativedelta(months=1)
 one_year_before_date = one_year_before.strftime('%Y.%m.%d')
 one_month_before_date = one_month_before.strftime('%Y.%m.%d')
 
+def store(title):
+    cur.execute(
+        "INSERT INTO Cloud (title) VALUES (\"%s\")", (title)
+    )
+    cur.connection.commit()
+
 plusUrl = quote_plus(input('검색어를 입력하세요 : ')) # 네이버 검색 후 검색 결과
+cur.execute("USE crawling")
 start_date = (now_date) # 오늘날짜
 end_date = (one_month_before_date) # 오늘로부터 1달전 날짜
 last_date = (one_year_before_date) # 오늘로부터 1년전 날짜
@@ -38,6 +50,7 @@ while 1:
 
         print(f'---{end_date}~{start_date}뉴스 중{count}페이지 결과입니다 --------')
         for i in title:
+            store(i.attrs['title'].replace("‘", " ").replace("’", " ").replace("“", " ").replace("”", " ").replace("'", " ").replace('"', " ").replace("\n", ""))
             print(i.attrs['title'])
 
         page_num += 10
@@ -55,3 +68,5 @@ while 1:
             break
     if end_date < last_date:
         break
+        curl.close()
+        conn.close()
