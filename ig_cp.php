@@ -86,6 +86,7 @@ body {
 }
 
 .right-content {
+	display: none;
 	flex-grow: 2;
 	height: 100%;
 }
@@ -172,6 +173,23 @@ $(document).ready(function() {
 
 </script>
 
+<!--right-content script-->
+
+<script type="text/javascript">
+
+function openBoard(classname) {
+	var el = document.getElementsByName('select_type')[0].value;
+	var board = document.getElementsByClassName(classname);
+	if(el != "") {
+		board[0].style.display = "block";
+	} else {
+		board[0].style.display  = "none";
+	}
+	return true;
+}
+
+</script>
+
 </head>
 <body>
 	<div class="container">
@@ -201,7 +219,7 @@ $(document).ready(function() {
 										<option class="selectclass" id="smartfactory" value="스마트팩토리" <?php if($_COOKIE[selectType] == "스마트팩토리"){echo "selected"; }?>> 스마트팩토리</option>
 									</select>
 									<div id="form">
-										<input type="submit" value="search" id="bt">
+										<input type="submit" value="search" id="bt" onclick="openBoard('right-content')">
 									</div>
 								</div>
 							</td>
