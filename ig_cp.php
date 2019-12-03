@@ -92,39 +92,7 @@ body {
 
 .table-container {
 	margin: auto; !important;
-	width: 100%;
-}
-
-#form {
-	height: 35px;
-	width: 100%;
-	border: 2px solid #1b5ac2;
-	background: #ffffff;
-	display: inline-block;
-	float: right;
-	padding-top: 1px;
-	margin: auto; !important;
-	text-align: center;
-}
-
-#input {
-	font-size: 12px;
-	width: calc(100%-70px);
-	padding: 10px;
-	border: 0px;
-	outline: none;
-	float: left;
-}
-
-#bt {
-	width: 50px;
-	height: 35px;
-	border: 0px;
-	background: #1b5ac2;
-	outline: none;
-	float: right;
-	color: #ffffff;
-	cursor: pointer;
+	width: 100%
 }
 
 .content-table {
@@ -141,6 +109,48 @@ body {
 }
 
 </style>
+
+<!--date script-->
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+
+//today
+var today = new Date();
+var day = today.getDate();
+var month = today.getMonth()+1;
+var year = today.getFullYear();
+
+if (day < 10) {
+	day = '0'+day;
+}
+
+if (month < 10) {
+	month = '0'+month;
+}
+
+//6month ago
+var lastDay = new Date();
+var last = lastDay.getTime()-(180*24*60*60*1000);
+lastDay.setTime(last);
+var lastYear = lastDay.getFullYear();
+var lastMonth = lastDay.getMonth()+1;
+var lastDate = lastDay.getDate();
+
+if (lastDate < 10) {
+	lastDate = '0'+lastDate;
+}
+
+if (lastMonth < 10) {
+	lastMonth = '0'+lastMonth;
+}
+
+$(document).ready(function() {
+	document.getElementById("from_date").value = lastYear+'-'+lastMonth+'-'+lastDate;
+	document.getElementById("to_date").value = year+'-'+month+'-'+day;
+});
+
+</script>
+
 </head>
 <body>
 	<div class="container">
@@ -161,10 +171,12 @@ body {
 						<td style="text-align: center;">
 							<div id="form">
 								<select name="select_type" id="select-type">
-									<option value="">choose</option>
+									<option value="" style="font-weight: bold;">선택하세요</option>
 									<option class="selectclass" id="5G" value="5G" <? if($_COOKIE[selectType] == "5G"){echo "5G"; }?> 5G</option>
-									<option class="selectclass" id="cloud" value="cloud" <? if($_COOKIE[selectType] == "cloud"){echo "cloud"; }?> cloud</option>
-									<option class="selectclass" id="AI" value="AI" <? if($_COOKIE[selectType] == "AI"){echo "AI"; }?> AI</option>
+									<option class="selectclass" id="cloud" value="클라우드" <? if($_COOKIE[selectType] == "클라우드"){echo "클라우드"; }?> 클라우드</option>
+									<option class="selectclass" id="AI" value="인공지능" <? if($_COOKIE[selectType] == "인공지능"){echo "인공지능"; }?> 인공지능</option>
+									<option class="selectclass" id="blockchain" value="인공지능" <? if($_COOKIE[selectType] == "블록체인"){echo "블록체인"; }?> 블록체인</option>
+									<option class="selectclass" id="smartfactory" value="스마트팩토리" <? if($_COOKIE[selectType] == "스마트팩토리"){echo "스마트팩토리"; }?> 스마트팩토리</option>
 							</div>
 						</td>
 					</tr>
