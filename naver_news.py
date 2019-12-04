@@ -9,7 +9,7 @@ from dateutil.relativedelta import relativedelta
 import requests
 import pymysql
 
-conn = pymysql.connect(host='localhost', user='xpxp9985', password='kch782586!!!', db='crawling', charset='utf8mb4')
+conn = pymysql.connect(host='localhost', user='user_name', password='userpassword', db='crawling', charset='utf8mb4')
 cur = conn.cursor()
 
 now = datetime.now()
