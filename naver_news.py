@@ -68,5 +68,5 @@ while 1:
             break
     if end_date < last_date:
         break
-        curl.close()
+        cur.close()
         conn.close()
