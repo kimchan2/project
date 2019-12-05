@@ -35,7 +35,7 @@ def store_only_title(title):
     )
     cur.connection.commit()
 
-plusUrl = quote_plus(input('검색어를 입력하세요 : ')) # 네이버 검색 후 검색 결과
+plusUrl = quote_plus(input('검색어를 입력하세요 : ')) # 네이버 검색
 cur.execute("USE crawling")
 start_date = (now_date) # 오늘날짜
 end_date = (one_month_before_date) # 오늘로부터 1달전 날짜
