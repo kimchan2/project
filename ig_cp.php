@@ -169,24 +169,13 @@ if (lastMonth < 10) {
 $(document).ready(function() {
 	document.getElementById("from_date").value = lastYear+'-'+lastMonth+'-'+lastDate;
 	document.getElementById("to_date").value = year+'-'+month+'-'+day;
-});
 
-</script>
-
-<!--right-content script-->
-
-<script type="text/javascript">
-
-function openBoard(classname) {
-	var el = document.getElementsByName('select_type')[0].value;
-	var board = document.getElementsByClassName(classname);
-	if(el != "") {
+	//right-content script
+	if("<?= $_GET[select_type] ?>" != "") {
+		var board = document.getElementsByClassName('right-content');
 		board[0].style.display = "block";
-	} else {
-		board[0].style.display  = "none";
 	}
-	return true;
-}
+});
 
 </script>
 
@@ -219,7 +208,7 @@ function openBoard(classname) {
 										<option class="selectclass" id="smartfactory" value="스마트팩토리" <?php if($_COOKIE[selectType] == "스마트팩토리"){echo "selected"; }?>> 스마트팩토리</option>
 									</select>
 									<div id="form">
-										<input type="submit" value="search" id="bt" onclick="openBoard('right-content')">
+										<input type="submit" value="search" id="bt">
 									</div>
 								</div>
 							</td>
