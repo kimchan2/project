@@ -4,13 +4,25 @@ if($_GET[select_type] != "") {
 	setcookie("selectType", "{$_GET[select_type]}", time()+86400*30,"/");
 	$_COOKIE["selectType"] = $_GET[select_type]; //for cookie save
 }
-
+/*
+$host = '52.141.40.123';
+$user = 'user_name';
+$pw = 'userpassword';
+$dbName = 'crawling';
+$mysqli = mysqli_connect($host, $user, $pw, $dbName);
+ */
 ?>
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"/>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384- Vkoo8x4CGsO3+ Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384- wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery- 3.4.1.slim.min.js"integrity="sha384- J6qa4849blE2+ poT4WnyKhv5vZF5SrPoOiEjwBvKU7imGFAV0wwj1yYfoRSJoZ+ n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384- Q6E9RHvblyZFJoft+ 2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
 <title>Industry Gate</title>
 
 <style>
@@ -89,11 +101,7 @@ body {
 	display: none;
 	flex-grow: 2;
 	height: 100%;
-}
-
-.table-container {
-	margin: auto; !important;
-	width: 100%
+	padding-right: 50px;
 }
 
 .content-table {
@@ -128,6 +136,11 @@ body {
 	border: 5px ridge #1b5ac2;
 	float: left;
 	cursor: pointer;
+}
+
+#text {
+	display: inline-block;
+	margin-right: 10px;
 }
 
 </style>
@@ -169,24 +182,13 @@ if (lastMonth < 10) {
 $(document).ready(function() {
 	document.getElementById("from_date").value = lastYear+'-'+lastMonth+'-'+lastDate;
 	document.getElementById("to_date").value = year+'-'+month+'-'+day;
-});
 
-</script>
-
-<!--right-content script-->
-
-<script type="text/javascript">
-
-function openBoard(classname) {
-	var el = document.getElementsByName('select_type')[0].value;
-	var board = document.getElementsByClassName(classname);
-	if(el != "") {
+	//right-content script
+	if("<?= $_GET[select_type] ?>" != "") {
+		var board = document.getElementsByClassName('right-content');
 		board[0].style.display = "block";
-	} else {
-		board[0].style.display  = "none";
 	}
-	return true;
-}
+});
 
 </script>
 
@@ -204,6 +206,7 @@ function openBoard(classname) {
 						<tr>
 							<td style="text-align: center;">
 								<div id="date-select">
+									<section id="text">기간 입력</section>
 									<input type="date" value="2019-02-10" id="from_date" name="from_date">
 									<input type="date" value="2019-12-10" id="to_date" name="to_date">
 								</div>
@@ -219,7 +222,7 @@ function openBoard(classname) {
 										<option class="selectclass" id="smartfactory" value="스마트팩토리" <?php if($_COOKIE[selectType] == "스마트팩토리"){echo "selected"; }?>> 스마트팩토리</option>
 									</select>
 									<div id="form">
-										<input type="submit" value="search" id="bt" onclick="openBoard('right-content')">
+										<input type="submit" value="search" id="bt">
 									</div>
 								</div>
 							</td>
@@ -232,13 +235,13 @@ function openBoard(classname) {
 			<div class="left-content">
 			</div>
 			<div class="right-content">
-				<table class="content-table">
+				<table class="table table-striped">
 					<thead>
 					<tr>
-						<th class="th-ele">number</th>
-						<th class="th-ele">title</th>
-						<th class="th-ele">source</th>
-						<th class="th-ele">date</th>
+						<th style="width:15%;" class="th-ele">number</th>
+						<th style="width:45%;" class="th-ele">title</th>
+						<th style="width:20%;" class="th-ele">source</th>
+						<th style="width:20%;" class="th-ele">date</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -248,6 +251,19 @@ function openBoard(classname) {
 						<td>ayoung</td>
 						<td>2019.12.01</td>
 					</tr>
+					<tr>
+						<td>1</td>
+						<td>how...</td>
+						<td>ayoung</td>
+						<td>2019.12.01</td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>how...</td>
+						<td>ayoung</td>
+						<td>2019.12.01</td>
+					</tr>
+
 					</tbody>
 				</table>
 			</div>
@@ -255,4 +271,49 @@ function openBoard(classname) {
 		<div class="footer">
 		</div>
 	</div>
-</body> 
+</body>
+
+<?php
+/*
+$resource = mysql_query(" SELECT * FROM crawling");
+$total_len = mysql_num_rows($resource);
+
+if( isset($_GET[idx]) ) {
+	$start = $_GET[idx] * 10;
+	$sql = "SELECT * FROM board ORDER BY no DESC LIMIT $start, 10";
+} else {
+	$sql = "SELECT * FROM board ORDER BY no DESC LIMIT 10";
+}
+$resource = mysql_query($sql);
+
+$num = 1;
+while( $row = mysql_fetch_assoc($resource)) {
+	print"<tr>";
+	print "<th scope='row'>$num</th>";
+	print "<td>$row[title]</td>";
+	print "<td>$row[writer]</td>";
+	print "<td>$row[time]</td>";
+	print "</tr>";
+
+	$num++;
+}
+
+$count = (int)($total_len/10);
+if ($total_len % 10) {$count++;}
+
+print"<tr>";
+print"<td colspan=4 align=center>";
+
+for ($i = 0; $i < $count; $i++) {
+	print "<a href=http://52.141.16.225/ig.php?idx={$i}> [";
+	$j = $i +1;
+	print $j;
+	print "] </a>";
+}
+
+print "</td>";
+print "</tr>";
+ */
+?>
+
+</html> 
