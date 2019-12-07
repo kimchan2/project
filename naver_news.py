@@ -8,32 +8,43 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import requests
 import pymysql
+import os
+import json
 
-conn = pymysql.connect(host='localhost', user='xpxp9985', password='kch782586!!!', db='crawling', charset='utf8mb4')
+
+conn = pymysql.connect(host='localhost', user='user_name', password='userpassword', db='crawling', charset='utf8mb4')
 cur = conn.cursor()
 
 now = datetime.now()
 now_date = now.strftime('%Y.%m.%d')
 one_year_before = now - relativedelta(years=1)
+three_month_before = now - relativedelta(months=3) # 감정분석은 3개월전까지만
 one_month_before = now - relativedelta(months=1)
 one_year_before_date = one_year_before.strftime('%Y.%m.%d')
 one_month_before_date = one_month_before.strftime('%Y.%m.%d')
+three_month_before_date = three_month_before.strftime('%Y.%m.%d')
 
-def store(title):
+def store(title, score, magnitude):
     cur.execute(
-        "INSERT INTO Cloud (title) VALUES (\"%s\")", (title)
+        "INSERT INTO cloud(title, score, magnitude) VALUES (\"%s\", \"%s\", \"%s\")", (title, score, magnitude)
+    )
+
+def store_only_title(title):
+    cur.execute(
+        "INSERT INTO cloud(title) VALUES (\"%s\")", (title)
     )
     cur.connection.commit()
 
-plusUrl = quote_plus(input('검색어를 입력하세요 : ')) # 네이버 검색 후 검색 결과
+plusUrl = quote_plus(input('검색어를 입력하세요 : ')) # 네이버 검색
 cur.execute("USE crawling")
 start_date = (now_date) # 오늘날짜
 end_date = (one_month_before_date) # 오늘로부터 1달전 날짜
 last_date = (one_year_before_date) # 오늘로부터 1년전 날짜
+three_date = (three_month_before_date)
 page_num = 1 # 페이지수
 count = 1 # 페이지 체크
 
-last_page = 3991 # naver_news provides only 4,000 articles
+last_page = 3991 # naver_news provides only 4,000 articles = 3991
 while 1:
     page_num = 1  # 페이지 초기화
     count = 1  # 카운트 초기화
@@ -50,9 +61,16 @@ while 1:
 
         print(f'---{end_date}~{start_date}뉴스 중{count}페이지 결과입니다 --------')
         for i in title:
-            store(i.attrs['title'].replace("‘", " ").replace("’", " ").replace("“", " ").replace("”", " ").replace("'", " ").replace('"', " ").replace("\n", ""))
+            news = i.attrs['title'].replace("‘", " ").replace("’", " ").replace("“", " ").replace("”", " ").replace("'", " ").replace('"', " ").replace("\n", "")
             print(i.attrs['title'])
-
+            if start_date > three_date: # 감정분석은 3개월전까지만
+                curl = "curl " + "\"https://language.googleapis.com/v1/documents:analyzeSentiment?key=API키\" " + " -s -X POST -H" + " \"Content-Type:application/json\" " + "--data " + "'{" + "\"document\"" + ":" + "{" + "\"type\"" + ":" + "\"PLAIN_TEXT\"" + "," + "\"content\"" + ":\"" + news + "\"}" + "}" + "'"
+                #os.system(curl)
+                i = os.popen(curl).read()
+                i = json.loads(i)
+                store(news, i["documentSentiment"]["score"], i["documentSentiment"]["magnitude"])
+            else:
+                store_only_title(news)
         page_num += 10
         count += 1
 
@@ -68,5 +86,6 @@ while 1:
             break
     if end_date < last_date:
         break
-        curl.close()
-        conn.close()
+
+cur.close()
+conn.close()
