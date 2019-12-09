@@ -11,7 +11,6 @@ import pymysql
 import os
 import json
 
-
 conn = pymysql.connect(host='localhost', user='user_name', password='userpassword', db='crawling', charset='utf8mb4')
 cur = conn.cursor()
 
