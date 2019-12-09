@@ -32,5 +32,18 @@
 
 `source 가상환경이름/bin/activate`
 
+2. python3 라이브러리 설치
 
- 
+`pip3 install beautifulsoup4`
+
+`pip3 install wordcloud`
+
+`pip3 install quote`
+
+`pip3 install datetime`
+
+`pip3 install pymysql`
+
+`pip3 install matplotlib`
+
+`pip3 install konlpy` 
