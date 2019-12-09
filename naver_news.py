@@ -11,7 +11,6 @@ import pymysql
 import os
 import json
 
-
 conn = pymysql.connect(host='localhost', user='user_name', password='userpassword', db='crawling', charset='utf8mb4')
 cur = conn.cursor()
 
@@ -26,12 +25,12 @@ three_month_before_date = three_month_before.strftime('%Y.%m.%d')
 
 def store(title, score, magnitude):
     cur.execute(
-        "INSERT INTO cloud(title, score, magnitude) VALUES (\"%s\", \"%s\", \"%s\")", (title, score, magnitude)
+        "INSERT INTO SmartFactory(title, score, magnitude) VALUES (\"%s\", \"%s\", \"%s\")", (title, score, magnitude)
     )
 
 def store_only_title(title):
     cur.execute(
-        "INSERT INTO cloud(title) VALUES (\"%s\")", (title)
+        "INSERT INTO SmartFactory(title) VALUES (\"%s\")", (title)
     )
     cur.connection.commit()
 
@@ -64,7 +63,7 @@ while 1:
             news = i.attrs['title'].replace("‘", " ").replace("’", " ").replace("“", " ").replace("”", " ").replace("'", " ").replace('"', " ").replace("\n", "")
             print(i.attrs['title'])
             if start_date > three_date: # 감정분석은 3개월전까지만
-                curl = "curl " + "\"https://language.googleapis.com/v1/documents:analyzeSentiment?key=API키\" " + " -s -X POST -H" + " \"Content-Type:application/json\" " + "--data " + "'{" + "\"document\"" + ":" + "{" + "\"type\"" + ":" + "\"PLAIN_TEXT\"" + "," + "\"content\"" + ":\"" + news + "\"}" + "}" + "'"
+                curl = "curl " + "\"https://language.googleapis.com/v1/documents:analyzeSentiment?key=AIzaSyCzZoZL0VJIOSQDwTHCIHG7jYXpCYKMyko\" " + " -s -X POST -H" + " \"Content-Type:application/json\" " + "--data " + "'{" + "\"document\"" + ":" + "{" + "\"type\"" + ":" + "\"PLAIN_TEXT\"" + "," + "\"content\"" + ":\"" + news + "\"}" + "}" + "'"
                 #os.system(curl)
                 i = os.popen(curl).read()
                 i = json.loads(i)

@@ -11,7 +11,7 @@ import itertools
 conn = pymysql.connect(host='localhost', user='user_name', password='userpassword', db='crawling', charset='utf8mb4')
 cur = conn.cursor()
 cur.execute("USE crawling")
-cur.execute("SELECT title FROM Cloud")
+cur.execute("SELECT title FROM cloud")
 result = cur.fetchall()
 
 cur.close()
@@ -49,4 +49,4 @@ plt.tight_layout(pad=0)
 
 plt.show()
 #파일 다운로드
-#plt.savefig('/home/ubuntu/wordcloud_image1.png', bbox_inches='tight')
+plt.savefig('/data/git/project/wordcloud_image1.png', bbox_inches='tight')
