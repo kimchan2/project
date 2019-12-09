@@ -25,9 +25,9 @@
 ## 3. 설치
 ----------
 1. python3 가상환경 구성
-`sudo pip3 install virtualenv`
-`virtualenv 가상환경이름`
-`source 가상환경이름/bin/activate`
+`sudo pip3 install virtualenv
+virtualenv 가상환경이름
+source 가상환경이름/bin/activate`
 
 
  
