@@ -34,9 +34,9 @@ for sentence1 in sentences_tag:
             noun_adj_list.append(word)
 
 counts = Counter(noun_adj_list) # 형태소별로 카운트
-tags = counts.most_common(20) # 제일많은 20개 단어
+tags = counts.most_common(50) # 제일많은 20개 단어
 
-wc = WordCloud(max_font_size=500, font_path='/usr/share/fonts/truetype/nanum/NanumMyeongjo.ttf',
+wc = WordCloud(max_font_size=500, font_path='/usr/share/fonts/truetype/nanum/BinggraeMelona-Bold.ttf',
                     background_color='white',
                     width=1000, height=800)
 
@@ -47,6 +47,7 @@ plt.imshow(cloud)
 plt.axis('off')
 plt.tight_layout(pad=0)
 
+cloud.to_file("wordcloud.png")
+
 plt.show()
 #파일 다운로드
-plt.savefig('/data/git/project/wordcloud_image1.png', bbox_inches='tight')

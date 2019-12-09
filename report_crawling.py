@@ -10,7 +10,7 @@ from dateutil.relativedelta import relativedelta
 import pymysql
 import math
 
-conn = pymysql.connect(host='localhost', user='user_name', password='userpassword', db='crawling', charset='utf8mb4')
+conn = pymysql.connect(host='localhost', user='user_name', password='userpassword', db='crawling', charset='utf8')
 cur = conn.cursor()
 
 industry = ['클라우드', 'AI', '5G', '스마트팩토리', '블록체인']
@@ -18,7 +18,9 @@ def store(industry, title, URL):
     cur.execute(
         "INSERT INTO report(industry, title, URL) VALUES (\"%s\", \"%s\", \"%s\")", (industry ,title, URL)
     )
+    cur.connection.commit()
 
+cur.execute("USE crawling")
 pageNum = 0
 industry_count = 0;
 page_count = 1
