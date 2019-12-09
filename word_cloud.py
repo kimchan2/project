@@ -36,7 +36,7 @@ for sentence1 in sentences_tag:
 counts = Counter(noun_adj_list) # 형태소별로 카운트
 tags = counts.most_common(50) # 제일많은 20개 단어
 
-wc = WordCloud(max_font_size=500, font_path='/usr/share/fonts/truetype/nanum/BinggraeMelona-Bold.ttf',
+wc = WordCloud(max_font_size=500, font_path='/usr/share/fonts/truetype/BinggraeMelona-Bold.ttf',
                     background_color='white',
                     width=1000, height=800)
 

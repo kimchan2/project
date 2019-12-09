@@ -4,13 +4,7 @@ if($_GET[select_type] != "") {
 	setcookie("selectType", "{$_GET[select_type]}", time()+86400*30,"/");
 	$_COOKIE["selectType"] = $_GET[select_type]; //for cookie save
 }
-/*
-$host = '52.141.40.123';
-$user = 'user_name';
-$pw = 'userpassword';
-$dbName = 'crawling';
-$mysqli = mysqli_connect($host, $user, $pw, $dbName);
- */
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -89,19 +83,32 @@ body {
 	margin: auto; !important;
 	padding-top: 25px;
 	display: flex;
-	height: 80%;
+	height: 70%;
 }
 
 .left-content {
 	flex-grow: 1;
 	height: 100%;
+	width: 40%;
+	padding: 40px;
+	padding-right: 0; !important;
+}
+
+#picture {
+	margin: auto;
+	text-align: center;
+}
+
+#emotion {
+	margin: auto;
+	text-align: center;
 }
 
 .right-content {
 	display: none;
 	flex-grow: 2;
+	width: 60%;
 	height: 100%;
-	padding-right: 50px;
 }
 
 .content-table {
@@ -141,6 +148,25 @@ body {
 #text {
 	display: inline-block;
 	margin-right: 10px;
+}
+
+.pager {
+	display: inline-block;
+}
+
+.emot-content {
+	padding: 10px;
+	margin: auto; !important;
+	margin-top: 20px;
+	font-size: 18px;
+	font-weight: bold;
+	display: inline-block;
+	border: 2px ridge #1b5ac2;
+}
+
+#a-<?php if($_GET[page]){echo $_GET[page];}else{echo "0";}?> {
+	color: #1b5ac2;
+	font-weight: bold;
 }
 
 </style>
@@ -217,7 +243,7 @@ $(document).ready(function() {
 										<option value="" style="font-weight: bold;">선택하세요</option>
 										<option class="selectclass" id="5G" value="5G" <?php if($_COOKIE[selectType] == "5G"){echo "selected"; }?> > 5G </option>
 										<option class="selectclass" id="cloud" value="클라우드" <?php if($_COOKIE[selectType] == "클라우드"){echo "selected"; }?>> 클라우드</option>
-										<option class="selectclass" id="AI" value="인공지능" <?php if($_COOKIE[selectType] == "인공지능"){echo "selected"; }?>> 인공지능</option>
+										<option class="selectclass" id="AI" value="AI" <?php if($_COOKIE[selectType] == "AI"){echo "selected"; }?>> 인공지능</option>
 										<option class="selectclass" id="blockchain" value="블록체인" <?php if($_COOKIE[selectType] == "블록체인"){echo "selected"; }?>> 블록체인</option>
 										<option class="selectclass" id="smartfactory" value="스마트팩토리" <?php if($_COOKIE[selectType] == "스마트팩토리"){echo "selected"; }?>> 스마트팩토리</option>
 									</select>
@@ -233,38 +259,94 @@ $(document).ready(function() {
 		</div>
 		<div class="content-container">
 			<div class="left-content">
+				<div id="picture">
+					<image src="<?=$_GET[select_type]?>.png" onerror="this.style.display='none'" width="500px" height="400px">
+				</div>
+				<div id="emotion">
+				<?php
+				$conn = mysqli_connect('localhost','user_name','userpassword','crawling');
+				$var = $_GET[select_type];
+				if($_GET[select_type] != "") {
+					if($_GET[select_type] == "클라우드") {$var="cloud";}
+					else if($_GET[select_type] == "블록체인") {$var="BlockChain";}
+					else if($_GET[select_type] == "스마트팩토리") {$var="SmartFactory";}
+				
+				$sql = "SELECT score FROM $var WHERE score is NOT NULL";
+				$result = mysqli_query($conn,$sql);
+				$size = mysqli_num_rows($result);
+
+				$sum = 0;
+				while($row=mysqli_fetch_assoc($result)) {
+					$sum += $row['score'];
+				}
+
+				$avg = $sum/$size;
+				if($avg < -0.25) {echo "<p class='emot-content'>부정적 : ".$avg."</p>";}
+				else if($avg > 0.25){echo "<p class='emot-content'>긍정적 : ".$avg."</p>";}
+				else {echo "<p class='emot-content'>중립적 : ".$avg."</p>";}
+				}
+				?>
+				</div>
 			</div>
 			<div class="right-content">
 				<table class="table table-striped">
 					<thead>
 					<tr>
-						<th style="width:15%;" class="th-ele">number</th>
-						<th style="width:45%;" class="th-ele">title</th>
-						<th style="width:20%;" class="th-ele">source</th>
-						<th style="width:20%;" class="th-ele">date</th>
+						<th style="width:5%;" class="th-ele">number</th>
+						<th style="width:25%;" class="th-ele">title</th>
+						<th style="width:15%;" class="th-ele">source</th>
+						<th style="width:10%;" class="th-ele">date</th>
 					</tr>
 					</thead>
 					<tbody>
-					<tr>
-						<td>1</td>
-						<td>how...</td>
-						<td>ayoung</td>
-						<td>2019.12.01</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>how...</td>
-						<td>ayoung</td>
-						<td>2019.12.01</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>how...</td>
-						<td>ayoung</td>
-						<td>2019.12.01</td>
-					</tr>
+					<?php
+					$industry = $_GET[select_type];
+					if($industry != "") {
+						
+						$sql="SELECT * FROM Report WHERE industry = \"'$industry'\"";
+						$result = mysqli_query($conn,$sql);
+						$total_len = mysqli_num_rows($result);
+						$start = 1;
 
+						if(isset($_GET[page])&&($_GET[page])!=0) {
+							$start = 1+$_GET[page]*10;
+							$sql="select * from Report WHERE industry = \"'$industry'\" ORDER BY id ASC LIMIT $start, 10";
+						}else {
+							$sql="select * from Report WHERE industry = \"'$industry'\" ORDER BY id ASC LIMIT 10";
+						}
+						$result=mysqli_query($conn,$sql);
+
+						while($row=mysqli_fetch_assoc($result)) {
+							$title=$row['title'];
+							if(strlen($title)>40) {
+							$title=str_replace($row['title'],mb_substr($row['title'],0,30,"utf-8")."...",$row['title']);
+							}
+							$day=$row['date'];
+							$date=substr($day,1,11);
+							$date.=substr($day,24,5);
+
+					?>
+					<tr>
+						<td><?php echo $start ?></td>
+						<td><a href=<?php echo $row['URL']?> target="_blank"><?php echo $title;?></a></td>
+						<td><?php echo $row['writer']; ?></td>
+						<td><?php echo $date; ?></td>
+					</tr><?php ++$start;}?>
 					</tbody>
+					<?php
+					$count = (int)($total_len / 10);
+					if($total_len % 10) {$count++;}
+
+					echo "<tr>";
+					echo "<td colspan=4 align=center>";
+
+					for($i = 0; $i < $count; $i++) {
+						$j=$i+1;
+						echo "<a id='a-{$i}' href=./ig.php?from_date=$_GET[from_date]&to_date=$_GET[to_date]&select_type=$_GET[select_type]&page={$i}> [";
+						echo $j;
+						echo "] </a>";
+					}
+					}?>
 				</table>
 			</div>
 		</div>
@@ -272,48 +354,4 @@ $(document).ready(function() {
 		</div>
 	</div>
 </body>
-
-<?php
-/*
-$resource = mysql_query(" SELECT * FROM crawling");
-$total_len = mysql_num_rows($resource);
-
-if( isset($_GET[idx]) ) {
-	$start = $_GET[idx] * 10;
-	$sql = "SELECT * FROM board ORDER BY no DESC LIMIT $start, 10";
-} else {
-	$sql = "SELECT * FROM board ORDER BY no DESC LIMIT 10";
-}
-$resource = mysql_query($sql);
-
-$num = 1;
-while( $row = mysql_fetch_assoc($resource)) {
-	print"<tr>";
-	print "<th scope='row'>$num</th>";
-	print "<td>$row[title]</td>";
-	print "<td>$row[writer]</td>";
-	print "<td>$row[time]</td>";
-	print "</tr>";
-
-	$num++;
-}
-
-$count = (int)($total_len/10);
-if ($total_len % 10) {$count++;}
-
-print"<tr>";
-print"<td colspan=4 align=center>";
-
-for ($i = 0; $i < $count; $i++) {
-	print "<a href=http://52.141.16.225/ig.php?idx={$i}> [";
-	$j = $i +1;
-	print $j;
-	print "] </a>";
-}
-
-print "</td>";
-print "</tr>";
- */
-?>
-
 </html> 
