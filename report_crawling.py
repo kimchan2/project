@@ -10,7 +10,7 @@ from datetime import datetime
 import pymysql
 import math
 
-conn = pymysql.connect(host='localhost', user='user_name', password='userpassword', db='crawling', charset='utf8mb4')
+conn = pymysql.connect(host='localhost', user='user_name', password='userpassword', db='crawling', charset='utf8')
 cur = conn.cursor()
 
 industry = ['클라우드', 'AI', '5G', '스마트팩토리', '블록체인']
