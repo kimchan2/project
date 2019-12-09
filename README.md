@@ -22,7 +22,7 @@
 2. Google Cloud Natural Language API 키
  - 가이드라인 : https://cloud.google.com/natural-language/docs/basics?hl=ko
 
-## 3. 설치
+## 3. 설치 및 실행
 ----------
 1. python3 가상환경 구성
 
@@ -47,3 +47,21 @@
 `pip3 install matplotlib`
 
 `pip3 install konlpy` 
+
+3. MySQL 설치 및 설정
+
+`sudo apt install mysql-client`
+
+`sudo apt install mysql-server`
+
+`sudo mysql -u root -p`
+
+`ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';`
+
+`CREATE DATABASE crawling;`
+
+`CREATE USER 'user_name'@'localhost' IDENTIFIED BY 'userpassword';`
+
+`GRANT ALL PRIVILEGES ON crawling.* to user_name@localhost;`
+
+`FLUSH PRIVILEGES;`
