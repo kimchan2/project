@@ -17,7 +17,7 @@ cur = conn.cursor()
 
 now = datetime.now()
 now_date = now.strftime('%Y.%m.%d')
-one_year_before = now - relativedelta(years=1)
+one_year_before = now - relativedelta(months=6)
 three_month_before = now - relativedelta(months=3) # 감정분석은 3개월전까지만
 one_month_before = now - relativedelta(months=1)
 one_year_before_date = one_year_before.strftime('%Y.%m.%d')
@@ -26,12 +26,12 @@ three_month_before_date = three_month_before.strftime('%Y.%m.%d')
 
 def store(title, score, magnitude):
     cur.execute(
-        "INSERT INTO cloud(title, score, magnitude) VALUES (\"%s\", \"%s\", \"%s\")", (title, score, magnitude)
+        "INSERT INTO SmartFactory(title, score, magnitude) VALUES (\"%s\", \"%s\", \"%s\")", (title, score, magnitude)
     )
 
 def store_only_title(title):
     cur.execute(
-        "INSERT INTO cloud(title) VALUES (\"%s\")", (title)
+        "INSERT INTO SmartFactory(title) VALUES (\"%s\")", (title)
     )
     cur.connection.commit()
 
@@ -44,7 +44,7 @@ three_date = (three_month_before_date)
 page_num = 1 # 페이지수
 count = 1 # 페이지 체크
 
-last_page = 3991 # naver_news provides only 4,000 articles = 3991
+last_page = 1991 # naver_news provides only 4,000 articles = 3991
 while 1:
     page_num = 1  # 페이지 초기화
     count = 1  # 카운트 초기화
@@ -64,7 +64,7 @@ while 1:
             news = i.attrs['title'].replace("‘", " ").replace("’", " ").replace("“", " ").replace("”", " ").replace("'", " ").replace('"', " ").replace("\n", "")
             print(i.attrs['title'])
             if start_date > three_date: # 감정분석은 3개월전까지만
-                curl = "curl " + "\"https://language.googleapis.com/v1/documents:analyzeSentiment?key=API키\" " + " -s -X POST -H" + " \"Content-Type:application/json\" " + "--data " + "'{" + "\"document\"" + ":" + "{" + "\"type\"" + ":" + "\"PLAIN_TEXT\"" + "," + "\"content\"" + ":\"" + news + "\"}" + "}" + "'"
+                curl = "curl " + "\"https://language.googleapis.com/v1/documents:analyzeSentiment?key=AIzaSyCzZoZL0VJIOSQDwTHCIHG7jYXpCYKMyko\" " + " -s -X POST -H" + " \"Content-Type:application/json\" " + "--data " + "'{" + "\"document\"" + ":" + "{" + "\"type\"" + ":" + "\"PLAIN_TEXT\"" + "," + "\"content\"" + ":\"" + news + "\"}" + "}" + "'"
                 #os.system(curl)
                 i = os.popen(curl).read()
                 i = json.loads(i)
