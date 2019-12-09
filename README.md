@@ -67,15 +67,23 @@
 `FLUSH PRIVILEGES;`
 
 `CREATE TABLE cloud( id int(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+
 		     title varchar(200) NOT NULL,
+
 		     score decimal(2,1),
+
 		     magnitude decimal(2,1),
+
 		     created TIMESTAMP DEFAULT CURRNET_TIMESTAMP);`
 
 `CREATE TABLE report( id int(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+
 		      industry varchar(200) NOT NULL,
+
 		      title varchar(200) NOT NULL,
+
 		      URL varchar(333) NOT NULL,
+
 		      created TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`
 
 4. 크롤링 실행
